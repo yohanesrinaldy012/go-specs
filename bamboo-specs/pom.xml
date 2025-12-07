@@ -21,6 +21,23 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.atlassian.bamboo</groupId>
+      <artifactId>bamboo-specs-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.atlassian.bamboo</groupId>
+      <artifactId>bamboo-specs</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -34,4 +51,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <repositories>
+    <repository>
+      <id>atlassian-public</id>
+      <url>https://packages.atlassian.com/maven-public</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>atlassian-public-plugins</id>
+      <url>https://packages.atlassian.com/maven-public</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
