@@ -31,6 +31,7 @@
       <artifactId>bamboo-specs</artifactId>
     </dependency>
 
+    <!-- Test dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -38,19 +39,8 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <compilerArgs>
-            <compilerArg>-proc:none</compilerArg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <!-- run 'mvn test' to perform offline validation of the plan -->
+  <!-- run 'mvn -Ppublish-specs' to upload the plan to your Bamboo server -->
 
   <repositories>
     <repository>
