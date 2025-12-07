@@ -1,14 +1,12 @@
 package com.example.pnm.go.pipeline;
 
 import com.atlassian.bamboo.specs.api.BambooSpec;
-import com.atlassian.bamboo.specs.api.builders.Project;
 import com.atlassian.bamboo.specs.api.builders.Variable;
 import com.atlassian.bamboo.specs.api.builders.plan.Plan;
-import com.atlassian.bamboo.specs.api.builders.plan.PlanBranchManagement;
+import com.atlassian.bamboo.specs.api.builders.plan.branches.PlanBranchManagement;
 import com.atlassian.bamboo.specs.api.builders.plan.branches.BranchCleanup;
-import com.atlassian.bamboo.specs.api.builders.plan.branches.PlanBranchIntegration;
-import com.atlassian.bamboo.specs.api.builders.repository.LinkedRepository;
-import com.atlassian.bamboo.specs.api.model.plan.ProjectIdentifier;
+import com.atlassian.bamboo.specs.api.builders.plan.branches.BranchIntegration;
+import com.atlassian.bamboo.specs.api.builders.project.Project;
 import com.example.pnm.go.config.AppConfig;
 import com.example.pnm.go.config.Defaults;
 import com.example.pnm.go.governance.GoStages;
@@ -23,7 +21,7 @@ public class Plan_Go_App1 {
 
     return new Plan(project, cfg.planName(), cfg.planKey())
         .description("Go service " + cfg.serviceName() + " build/test + docker push (branch configurable).")
-        .planRepositories(new LinkedRepository(cfg.repoKey()))
+        .linkedRepositories(cfg.repoKey())
         .variables(
             new Variable("ENV", "dev"),
             new Variable("BRANCH_NAME", "main"),
@@ -45,8 +43,7 @@ public class Plan_Go_App1 {
             GoStages.triggerArgo())
         .planBranchManagement(new PlanBranchManagement()
             .createForVcsBranch()
-            .integration(new PlanBranchIntegration()
-                .integrationPlan(new ProjectIdentifier(Defaults.PROJECT_KEY, cfg.planKey())))
+            .branchIntegration(new BranchIntegration().integrationBranchKey(cfg.planKey()))
             .delete(new BranchCleanup().whenRemovedFromRepository(true)));
   }
 

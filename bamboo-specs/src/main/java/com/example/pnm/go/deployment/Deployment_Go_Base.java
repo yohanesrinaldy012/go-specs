@@ -1,11 +1,10 @@
 package com.example.pnm.go.deployment;
 
-import com.atlassian.bamboo.specs.api.builders.deployment.DeploymentProject;
+import com.atlassian.bamboo.specs.api.builders.deployment.Deployment;
 import com.atlassian.bamboo.specs.api.builders.deployment.Environment;
-import com.atlassian.bamboo.specs.api.builders.deployment.ReleaseVersioning;
-import com.atlassian.bamboo.specs.api.builders.deployment.triggers.AfterSuccessfulBuildPlanTrigger;
+import com.atlassian.bamboo.specs.api.builders.deployment.ReleaseNaming;
 import com.atlassian.bamboo.specs.api.builders.plan.PlanIdentifier;
-import com.atlassian.bamboo.specs.api.builders.task.ScriptTask;
+import com.atlassian.bamboo.specs.builders.task.ScriptTask;
 import com.example.pnm.go.config.AppConfig;
 import com.example.pnm.go.config.Defaults;
 
@@ -13,7 +12,7 @@ import com.example.pnm.go.config.Defaults;
 public final class Deployment_Go_Base {
   private Deployment_Go_Base() {}
 
-  public static DeploymentProject build(AppConfig cfg) {
+  public static Deployment build(AppConfig cfg) {
     PlanIdentifier sourcePlan = new PlanIdentifier(Defaults.PROJECT_KEY, cfg.planKey());
 
     Environment dev = new Environment("dev")
@@ -25,7 +24,7 @@ public final class Deployment_Go_Base {
                 "echo \"Service: " + cfg.serviceName() + "\"",
                 "echo \"Release: ${bamboo.deploy.release} (from build)\"",
                 "echo \"Tag/IMAGE_TAG (if set in build): ${bamboo_IMAGE_TAG:-auto}\"")))
-        .triggers(new AfterSuccessfulBuildPlanTrigger());
+        .triggers();
 
     Environment uat = new Environment("uat")
         .tasks(new ScriptTask()
@@ -47,13 +46,10 @@ public final class Deployment_Go_Base {
                 "echo \"Release: ${bamboo.deploy.release}\"",
                 "echo \"Tag/IMAGE_TAG: ${bamboo_IMAGE_TAG:-auto}\"")));
 
-    return new DeploymentProject()
-        .name(cfg.planKey() + "-Deployment")
-        .key(cfg.planKey() + "DEP")
+    return new Deployment(sourcePlan, cfg.planKey() + "-Deployment")
         .description("Deployment pipeline for " + cfg.planName())
-        .sourcePlan(sourcePlan)
-        .releaseVersioning(new ReleaseVersioning()
-            .format("${bamboo.buildNumber}"))
+        .oid(cfg.planKey() + "DEP")
+        .releaseNaming(new ReleaseNaming("${bamboo.buildNumber}"))
         .environments(dev, uat, prod);
   }
 }
