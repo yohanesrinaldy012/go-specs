@@ -72,7 +72,7 @@ public final class GoTasks {
             "#!/bin/bash",
             "set -euo pipefail",
             "IMAGE=\"${bamboo_GO_BASE_IMAGE:-" + Defaults.GO_BASE_IMAGE + "}\"",
-            "MAIN_GO_PATH=\"${bamboo.MAIN_GO_PATH:-.}\"",
+            "MAIN_GO_PATH=\"${bamboo_MAIN_GO_PATH:-.}\"",
             "docker run --rm --user 0 \\",
             "  -v \"$PWD:/app\" \\",
             "  -v \"$PWD/.jenkins-go-cache/mod:/gomod\" \\",
