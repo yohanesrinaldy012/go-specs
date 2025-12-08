@@ -8,7 +8,8 @@ public final class Defaults {
 
   public static final String DOCKER_REGISTRY = "ghcr.io";
   public static final String DOCKER_NAMESPACE = "yohanesrinaldy012";
-  public static final String GO_BASE_IMAGE = DOCKER_REGISTRY + "/base-images/go-toolset:1.23.9-1749636489";
+  // Go toolset image used for build/test steps (perintah user).
+  public static final String GO_BASE_IMAGE = "registry.access.redhat.com/ubi9/go-toolset:9.7";
   public static final String ARGO_APP_URL = "https://argocd.example.com";
 
   public static final AppConfig[] APPS = new AppConfig[]{

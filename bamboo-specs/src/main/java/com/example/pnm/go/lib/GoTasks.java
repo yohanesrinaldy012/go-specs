@@ -2,6 +2,7 @@ package com.example.pnm.go.lib;
 
 import com.atlassian.bamboo.specs.api.builders.task.Task;
 import com.atlassian.bamboo.specs.builders.task.ScriptTask;
+import com.example.pnm.go.config.Defaults;
 
 public final class GoTasks {
   private GoTasks() {}
@@ -24,7 +25,7 @@ public final class GoTasks {
         .inlineBody(String.join("\n",
             "#!/bin/bash",
             "set -euo pipefail",
-            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-nexusrepo.pnm.co.id/base-images/go-toolset:1.23.9-1749636489}\"",
+            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-" + Defaults.GO_BASE_IMAGE + "}\"",
             "echo \"Using base image: ${IMAGE}\"",
             "if [ -n \"${bamboo_BRANCH_NAME:-}\" ]; then",
             "  git fetch origin \"${bamboo_BRANCH_NAME}\" && git checkout \"${bamboo_BRANCH_NAME}\" && git reset --hard \"origin/${bamboo_BRANCH_NAME}\" || true",
@@ -50,7 +51,7 @@ public final class GoTasks {
         .inlineBody(String.join("\n",
             "#!/bin/bash",
             "set -euo pipefail",
-            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-nexusrepo.pnm.co.id/base-images/go-toolset:1.23.9-1749636489}\"",
+            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-" + Defaults.GO_BASE_IMAGE + "}\"",
             "docker run --rm --user 0 \\",
             "  -v \"$PWD:/app\" \\",
             "  -v \"$PWD/.jenkins-go-cache/mod:/gomod\" \\",
@@ -70,7 +71,7 @@ public final class GoTasks {
         .inlineBody(String.join("\n",
             "#!/bin/bash",
             "set -euo pipefail",
-            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-nexusrepo.pnm.co.id/base-images/go-toolset:1.23.9-1749636489}\"",
+            "IMAGE=\"${bamboo_GO_BASE_IMAGE:-" + Defaults.GO_BASE_IMAGE + "}\"",
             "MAIN_GO_PATH=\"${bamboo_MAIN_GO_PATH:-.}\"",
             "docker run --rm --user 0 \\",
             "  -v \"$PWD:/app\" \\",
