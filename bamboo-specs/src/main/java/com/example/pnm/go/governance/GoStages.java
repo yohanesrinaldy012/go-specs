@@ -2,6 +2,8 @@ package com.example.pnm.go.governance;
 
 import com.atlassian.bamboo.specs.api.builders.plan.Job;
 import com.atlassian.bamboo.specs.api.builders.plan.Stage;
+import com.atlassian.bamboo.specs.api.builders.plan.artifact.Artifact;
+import com.atlassian.bamboo.specs.api.builders.plan.artifact.ArtifactDependency;
 import com.example.pnm.go.lib.Checkout;
 import com.example.pnm.go.lib.GoTasks;
 
@@ -15,14 +17,20 @@ public final class GoStages {
                 GoTasks.prepareCache(),
                 GoTasks.goDeps(),
                 GoTasks.goTest(),
-                GoTasks.goBuild()));
+                GoTasks.goBuild())
+            .artifacts(new Artifact()
+                .name("go-binary")
+                .copyPattern("build/app")
+                .shared(true)));
   }
 
   public static Stage dockerBuildPush() {
     return new Stage("Docker Image")
         .jobs(new Job("Build Push Image", "GOIMG")
             .tasks(Checkout.defaultRepo(),
-                GoTasks.dockerBuildPush()));
+                GoTasks.dockerBuildPush())
+            .artifactDependencies(new ArtifactDependency()
+                .name("go-binary")));
   }
 
   public static Stage promoteImage() {
