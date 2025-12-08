@@ -89,6 +89,7 @@ public final class GoTasks {
             "  sh -c '",
             "    go env -w GOMODCACHE=/gomod && \\",
             "    go env -w GOCACHE=/gocache && \\",
+            "    echo ${MAIN_GO_PATH} && \\",
             "    CGO_ENABLED=0 GOOS=linux go build -ldflags=\"-s -w\" -buildvcs=false -o ./build/app ${MAIN_GO_PATH}",
             "  '"));
   }
