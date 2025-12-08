@@ -5,6 +5,7 @@ import com.atlassian.bamboo.specs.api.builders.deployment.Environment;
 import com.atlassian.bamboo.specs.api.builders.deployment.ReleaseNaming;
 import com.atlassian.bamboo.specs.api.builders.plan.PlanIdentifier;
 import com.atlassian.bamboo.specs.builders.task.ScriptTask;
+import com.atlassian.bamboo.specs.builders.trigger.AfterSuccessfulBuildPlanTrigger;
 import com.example.pnm.go.config.AppConfig;
 import com.example.pnm.go.config.Defaults;
 
@@ -23,8 +24,9 @@ public final class Deployment_Go_Base {
                 "echo \"Deploying to DEV\"",
                 "echo \"Service: " + cfg.serviceName() + "\"",
                 "echo \"Release: ${bamboo.deploy.release} (from build)\"",
-                "echo \"Tag/IMAGE_TAG (if set in build): ${bamboo_IMAGE_TAG:-auto}\"")))
-        .triggers();
+                "TAG=\"${bamboo_IMAGE_TAG:-$(date +%Y%m%d)-${bamboo.deploy.release}}\"",
+                "echo \"Tag/IMAGE_TAG: ${TAG}\"")))
+        .triggers(new AfterSuccessfulBuildPlanTrigger());
 
     Environment uat = new Environment("uat")
         .tasks(new ScriptTask()
@@ -34,7 +36,8 @@ public final class Deployment_Go_Base {
                 "echo \"Deploying to UAT\"",
                 "echo \"Service: " + cfg.serviceName() + "\"",
                 "echo \"Release: ${bamboo.deploy.release}\"",
-                "echo \"Tag/IMAGE_TAG: ${bamboo_IMAGE_TAG:-auto}\"")));
+                "TAG=\"${bamboo_IMAGE_TAG:-$(date +%Y%m%d)-${bamboo.deploy.release}}\"",
+                "echo \"Tag/IMAGE_TAG: ${TAG}\"")));
 
     Environment prod = new Environment("prod")
         .tasks(new ScriptTask()
@@ -44,7 +47,8 @@ public final class Deployment_Go_Base {
                 "echo \"Deploying to PROD\"",
                 "echo \"Service: " + cfg.serviceName() + "\"",
                 "echo \"Release: ${bamboo.deploy.release}\"",
-                "echo \"Tag/IMAGE_TAG: ${bamboo_IMAGE_TAG:-auto}\"")));
+                "TAG=\"${bamboo_IMAGE_TAG:-$(date +%Y%m%d)-${bamboo.deploy.release}}\"",
+                "echo \"Tag/IMAGE_TAG: ${TAG}\"")));
 
     return new Deployment(sourcePlan, cfg.planKey() + "-Deployment")
         .description("Deployment pipeline for " + cfg.planName())
