@@ -2,8 +2,8 @@ package com.example.pnm.go.governance;
 
 import com.atlassian.bamboo.specs.api.builders.plan.Job;
 import com.atlassian.bamboo.specs.api.builders.plan.Stage;
-import com.atlassian.bamboo.specs.api.builders.plan.artifact.Artifact;
-import com.atlassian.bamboo.specs.api.builders.plan.artifact.ArtifactDependency;
+import com.atlassian.bamboo.specs.builders.plan.artifact.Artifact;
+import com.atlassian.bamboo.specs.builders.plan.artifact.ArtifactDependency;
 import com.example.pnm.go.lib.Checkout;
 import com.example.pnm.go.lib.GoTasks;
 
