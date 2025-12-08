@@ -1,5 +1,6 @@
 package com.example.pnm.go;
 
+import com.atlassian.bamboo.specs.api.BambooSpec;
 import com.atlassian.bamboo.specs.util.BambooServer;
 import com.example.pnm.go.deployment.Deployment_Go_App1;
 import com.example.pnm.go.deployment.Deployment_Go_App2;
@@ -10,11 +11,10 @@ import com.example.pnm.go.pipeline.Plan_Go_App3;
 
 /**
  * Manual publisher for the Go sample plans & deployments.
- * Run with environment variables:
- * BAMBOO_HOST=http://<bamboo-host>
- * BAMBOO_USER=<username>
- * BAMBOO_PASS=<password or PAT>
+ * Kredensial dibaca dari file .credentials di root repo (username=..., password=...),
+ * sama seperti contoh express.
  */
+@BambooSpec
 public class PublishAll {
     public static void main(String[] args) throws Exception {
         BambooServer server = new BambooServer("http://18.143.196.145:8085");
