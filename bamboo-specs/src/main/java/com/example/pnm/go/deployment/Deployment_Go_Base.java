@@ -48,7 +48,8 @@ public final class Deployment_Go_Base {
 
     return new Deployment(sourcePlan, cfg.planKey() + "-Deployment")
         .description("Deployment pipeline for " + cfg.planName())
-        .oid(cfg.planKey() + "DEP")
+        // oid hanya boleh lowercase/angka
+        .oid((cfg.planKey() + "dep").toLowerCase())
         .releaseNaming(new ReleaseNaming("${bamboo.buildNumber}"))
         .environments(dev, uat, prod);
   }
