@@ -39,8 +39,7 @@ public class Plan_Go_App2 {
             new Variable("ARGO_APP_URL", Defaults.ARGO_APP_URL))
         .stages(
             GoStages.buildAndTest(),
-            GoStages.dockerBuildPush(),
-            GoStages.triggerArgo())
+            GoStages.dockerBuildPush())
         .planBranchManagement(new PlanBranchManagement()
             .createForVcsBranch()
             .branchIntegration(new BranchIntegration().integrationBranchKey(cfg.planKey()))
