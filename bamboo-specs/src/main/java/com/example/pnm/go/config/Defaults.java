@@ -13,8 +13,8 @@ public final class Defaults {
   public static final String ARGO_APP_URL = "https://argocd.example.com";
 
   public static final AppConfig[] APPS = new AppConfig[]{
-      new AppConfig("Go App1", "GOA1", "go-app1", "go-app1", "go-app1", "./main.go"),
-      new AppConfig("Go App2", "GOA2", "go-app2", "go-app2", "go-app2", "./cmd/app/main.go"),
-      new AppConfig("Go App3", "GOA3", "go-app3", "go-app3", "go-app3", "./main.go")
+      new AppConfig("Go App1", "GOA1", "go-app1", "go-app1", "go-app1", "./main.go", "UAT-Deployer"),
+      new AppConfig("Go App2", "GOA2", "go-app2", "go-app2", "go-app2", "./cmd/app/main.go", "UAT-Deployer"),
+      new AppConfig("Go App3", "GOA3", "go-app3", "go-app3", "go-app3", "./main.go", "UAT-Deployer")
   };
 }

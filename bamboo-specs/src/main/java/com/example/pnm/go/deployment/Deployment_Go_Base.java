@@ -3,11 +3,15 @@ package com.example.pnm.go.deployment;
 import com.atlassian.bamboo.specs.api.builders.deployment.Deployment;
 import com.atlassian.bamboo.specs.api.builders.deployment.Environment;
 import com.atlassian.bamboo.specs.api.builders.deployment.ReleaseNaming;
+import com.atlassian.bamboo.specs.api.builders.permission.EnvironmentPermissions;
+import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
 import com.atlassian.bamboo.specs.api.builders.plan.PlanIdentifier;
 import com.atlassian.bamboo.specs.builders.task.ScriptTask;
 import com.atlassian.bamboo.specs.builders.trigger.AfterSuccessfulBuildPlanTrigger;
 import com.example.pnm.go.config.AppConfig;
 import com.example.pnm.go.config.Defaults;
+import com.atlassian.bamboo.specs.api.builders.permission.Permissions;
+import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
 
 /** Helper untuk membuat deployment project per app. */
 public final class Deployment_Go_Base {
@@ -56,5 +60,27 @@ public final class Deployment_Go_Base {
         .oid((cfg.planKey() + "dep").toLowerCase())
         .releaseNaming(new ReleaseNaming("${bamboo.buildNumber}"))
         .environments(dev, uat, prod);
+  }
+
+  public static EnvironmentPermissions[] buildEnvPermissions(AppConfig cfg) {
+    String deploymentName = cfg.planKey() + "-Deployment";
+    
+    // Define permission: Group ini boleh VIEW, EDIT, dan DEPLOY (EXECUTE)
+    Permissions envPerms = new Permissions()
+            .groupPermissions(cfg.deploymentGroup(), 
+                              PermissionType.VIEW, 
+                              PermissionType.EDIT, 
+                              PermissionType.BUILD);
+
+    // Return array permission untuk UAT dan PROD
+    return new EnvironmentPermissions[] {
+        new EnvironmentPermissions(deploymentName)
+            .environmentName("uat")
+            .permissions(envPerms),
+            
+        new EnvironmentPermissions(deploymentName)
+            .environmentName("prod")
+            .permissions(envPerms)
+    };
   }
 }
