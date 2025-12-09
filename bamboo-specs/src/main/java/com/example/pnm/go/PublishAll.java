@@ -1,6 +1,7 @@
 package com.example.pnm.go;
 
 import com.atlassian.bamboo.specs.api.BambooSpec;
+import com.atlassian.bamboo.specs.api.builders.permission.DeploymentPermissions;
 import com.atlassian.bamboo.specs.api.builders.permission.EnvironmentPermissions;
 import com.atlassian.bamboo.specs.util.BambooServer;
 import com.example.pnm.go.config.AppConfig;
@@ -34,9 +35,12 @@ public class PublishAll {
         System.out.println("Published GO plans & deployments to Bamboo.");
 
         for (AppConfig app : Defaults.APPS) {
-            // Panggil helper yang kita buat di Deployment_Go_Base
+            // A. Publish Permission Project (View/Edit Project)
+            DeploymentPermissions projectPerms = Deployment_Go_Base.buildProjectPermissions(app);
+            server.publish(projectPerms);
+
+            // B. Publish Permission Environment (Deploy Access)
             EnvironmentPermissions[] envPerms = Deployment_Go_Base.buildEnvPermissions(app);
-            
             for (EnvironmentPermissions ep : envPerms) {
                 server.publish(ep);
             }

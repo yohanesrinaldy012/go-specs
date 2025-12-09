@@ -3,6 +3,7 @@ package com.example.pnm.go.deployment;
 import com.atlassian.bamboo.specs.api.builders.deployment.Deployment;
 import com.atlassian.bamboo.specs.api.builders.deployment.Environment;
 import com.atlassian.bamboo.specs.api.builders.deployment.ReleaseNaming;
+import com.atlassian.bamboo.specs.api.builders.permission.DeploymentPermissions;
 import com.atlassian.bamboo.specs.api.builders.permission.EnvironmentPermissions;
 import com.atlassian.bamboo.specs.api.builders.permission.PermissionType;
 import com.atlassian.bamboo.specs.api.builders.plan.PlanIdentifier;
@@ -62,25 +63,44 @@ public final class Deployment_Go_Base {
         .environments(dev, uat, prod);
   }
 
+  public static DeploymentPermissions buildProjectPermissions(AppConfig cfg) {
+    String deploymentName = cfg.planKey() + "-Deployment";
+
+    // Gabungkan permission supaya UAT Group & PROD Group bisa LIHAT projectnya
+    Permissions projectPerms = new Permissions()
+            .groupPermissions(cfg.uatGroup(), PermissionType.VIEW, PermissionType.EDIT)
+            .groupPermissions(cfg.prodGroup(), PermissionType.VIEW, PermissionType.EDIT);
+
+    return new DeploymentPermissions(deploymentName)
+            .permissions(projectPerms);
+  }
+
   public static EnvironmentPermissions[] buildEnvPermissions(AppConfig cfg) {
     String deploymentName = cfg.planKey() + "-Deployment";
     
-    // Define permission: Group ini boleh VIEW, EDIT, dan DEPLOY (EXECUTE)
-    Permissions envPerms = new Permissions()
-            .groupPermissions(cfg.deploymentGroup(), 
+    // 1. Permission UAT: Grup UAT boleh VIEW, EDIT, dan BUILD (Deploy)
+    Permissions uatPerms = new Permissions()
+            .groupPermissions(cfg.uatGroup(), 
+                              PermissionType.VIEW, 
+                              PermissionType.EDIT, 
+                              PermissionType.BUILD); 
+
+    // 2. Permission PROD: HANYA Grup PROD yang boleh BUILD (Deploy)
+    // Ini adalah "Approval step 2": Hanya grup ini yang tombol deploy-nya aktif.
+    Permissions prodPerms = new Permissions()
+            .groupPermissions(cfg.prodGroup(), 
                               PermissionType.VIEW, 
                               PermissionType.EDIT, 
                               PermissionType.BUILD);
 
-    // Return array permission untuk UAT dan PROD
     return new EnvironmentPermissions[] {
         new EnvironmentPermissions(deploymentName)
             .environmentName("uat")
-            .permissions(envPerms),
+            .permissions(uatPerms),
             
         new EnvironmentPermissions(deploymentName)
             .environmentName("prod")
-            .permissions(envPerms)
+            .permissions(prodPerms)
     };
   }
 }
