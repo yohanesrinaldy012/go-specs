@@ -68,8 +68,7 @@ public final class Deployment_Go_Base {
 
     // Gabungkan permission supaya UAT Group & PROD Group bisa LIHAT projectnya
     Permissions projectPerms = new Permissions()
-            .groupPermissions(cfg.uatGroup(), PermissionType.VIEW, PermissionType.EDIT)
-            .groupPermissions(cfg.prodGroup(), PermissionType.VIEW, PermissionType.EDIT);
+            .loggedInUserPermissions(PermissionType.VIEW, PermissionType.VIEW_CONFIGURATION);
 
     return new DeploymentPermissions(deploymentName)
             .permissions(projectPerms);
